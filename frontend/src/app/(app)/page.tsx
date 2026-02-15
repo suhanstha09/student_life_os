@@ -34,6 +34,19 @@ type Streak = {
   current_count: number
 }
 
+type Note = {
+  id: number
+  title: string
+  updated_at: string
+}
+
+type LearningLog = {
+  id: number
+  topic: string
+  duration_minutes: number
+  logged_at: string
+}
+
 const priorityLabel = (priority: Assignment['priority']) => {
   switch (priority) {
     case 'urgent':
@@ -59,23 +72,29 @@ export default function Home() {
   const [sessions, setSessions] = useState<FocusSession[]>([])
   const [summaries, setSummaries] = useState<DailySummary[]>([])
   const [streaks, setStreaks] = useState<Streak[]>([])
+  const [notes, setNotes] = useState<Note[]>([])
+  const [logs, setLogs] = useState<LearningLog[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [assignmentData, sessionData, summaryData, streakData] =
+        const [assignmentData, sessionData, summaryData, streakData, noteData, logData] =
           await Promise.all([
             apiList<Assignment>('/v1/assignments/?ordering=due_date'),
             apiList<FocusSession>('/v1/focus/sessions/?ordering=-started_at'),
             apiList<DailySummary>('/v1/analytics/summaries/?ordering=-date'),
             apiList<Streak>('/v1/streaks/'),
+            apiList<Note>('/v1/notes/?ordering=-updated_at'),
+            apiList<LearningLog>('/v1/learning/logs/?ordering=-logged_at'),
           ])
         setAssignments(assignmentData)
         setSessions(sessionData)
         setSummaries(summaryData)
         setStreaks(streakData)
+        setNotes(noteData)
+        setLogs(logData)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load dashboard')
       } finally {
@@ -103,6 +122,9 @@ export default function Home() {
   }, [summaries])
 
   const currentStreak = streaks.find((item) => item.streak_type === 'focus')
+
+  const recentNotes = useMemo(() => notes.slice(0, 4), [notes])
+  const recentLogs = useMemo(() => logs.slice(0, 4), [logs])
 
   const createQuickAssignment = async () => {
     const due = new Date()
@@ -151,7 +173,7 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <section className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
@@ -174,8 +196,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
-        <Card className="space-y-4">
+      <section className="grid gap-5 xl:grid-cols-[1.4fr,1fr]">
+        <div className="space-y-5">
+          <Card className="space-y-4">
           <SectionHeader title="Today's priorities">
             <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
               View all
@@ -190,7 +213,7 @@ export default function Home() {
               priorities.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-3 py-3"
+                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
                 >
                   <div>
                     <p className="text-sm font-semibold text-neutral-800">{item.title}</p>
@@ -203,36 +226,95 @@ export default function Home() {
               ))
             )}
           </div>
-        </Card>
+          </Card>
 
-        <Card className="space-y-4">
-          <SectionHeader title="Upcoming deadlines">
-            <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
-              Add
-            </button>
-          </SectionHeader>
-          <div className="space-y-3">
-            {deadlines.length === 0 ? (
-              <p className="text-sm text-neutral-500">No deadlines scheduled.</p>
-            ) : (
-              deadlines.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-3 py-3"
-                >
-                  <div>
-                    <p className="text-sm font-semibold text-neutral-800">{item.title}</p>
-                    <p className="text-xs text-neutral-500">Due {formatDue(item.due_date)}</p>
+          <Card className="space-y-4">
+            <SectionHeader title="Upcoming deadlines">
+              <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+                Add
+              </button>
+            </SectionHeader>
+            <div className="space-y-3">
+              {deadlines.length === 0 ? (
+                <p className="text-sm text-neutral-500">No deadlines scheduled.</p>
+              ) : (
+                deadlines.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-800">{item.title}</p>
+                      <p className="text-xs text-neutral-500">Due {formatDue(item.due_date)}</p>
+                    </div>
+                    <Badge label={priorityLabel(item.priority)} tone="blue" />
                   </div>
-                  <Badge label={priorityLabel(item.priority)} tone="blue" />
-                </div>
-              ))
+                ))
+              )}
+            </div>
+          </Card>
+        </div>
+
+        <div className="space-y-5">
+          <Card className="space-y-4">
+            <SectionHeader title="Focus pipeline">
+              <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+                New session
+              </button>
+            </SectionHeader>
+            {sessions.length === 0 ? (
+              <p className="text-sm text-neutral-500">No sessions logged yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {sessions.slice(0, 4).map((session) => (
+                  <div
+                    key={session.id}
+                    className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-800">{session.title}</p>
+                      <p className="text-xs text-neutral-500">
+                        {new Date(session.started_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <p className="text-xs font-semibold text-neutral-600">
+                      {session.planned_duration} min
+                    </p>
+                  </div>
+                ))}
+              </div>
             )}
-          </div>
-        </Card>
+          </Card>
+
+          <Card className="space-y-4">
+            <SectionHeader title="Quick add">
+              <span className="text-xs font-semibold text-neutral-400">Shortcuts</span>
+            </SectionHeader>
+            <div className="grid gap-2">
+              <button
+                onClick={createQuickAssignment}
+                className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
+              >
+                New assignment
+              </button>
+              <button
+                onClick={createQuickFocus}
+                className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
+              >
+                Start focus session
+              </button>
+              <button
+                onClick={createQuickNote}
+                className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
+              >
+                Capture note
+              </button>
+            </div>
+          </Card>
+        </div>
       </section>
 
-      <section className="grid gap-6 md:grid-cols-3">
+      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         <Card>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
             Streak
@@ -253,28 +335,83 @@ export default function Home() {
         </Card>
         <Card>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
-            Quick add
+            Notes captured
           </p>
-          <div className="mt-4 flex flex-col gap-2">
-            <button
-              onClick={createQuickAssignment}
-              className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
-            >
-              New assignment
+          <p className="mt-4 text-3xl font-semibold text-neutral-900">
+            {notes.length}
+          </p>
+          <p className="mt-2 text-sm text-neutral-500">Updated this week</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Learning logs
+          </p>
+          <p className="mt-4 text-3xl font-semibold text-neutral-900">
+            {logs.length}
+          </p>
+          <p className="mt-2 text-sm text-neutral-500">Active topics tracked</p>
+        </Card>
+      </section>
+
+      <section className="grid gap-5 xl:grid-cols-[1.2fr,0.8fr]">
+        <Card className="space-y-4">
+          <SectionHeader title="Recent notes">
+            <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+              Open notes
             </button>
-            <button
-              onClick={createQuickFocus}
-              className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
-            >
-              Start focus session
+          </SectionHeader>
+          {recentNotes.length === 0 ? (
+            <p className="text-sm text-neutral-500">No notes created yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentNotes.map((note) => (
+                <div
+                  key={note.id}
+                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-neutral-800">{note.title}</p>
+                    <p className="text-xs text-neutral-500">
+                      Updated {new Date(note.updated_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <button className="rounded-lg border border-neutral-200 px-3 py-1 text-xs font-semibold text-neutral-600">
+                    Open
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+
+        <Card className="space-y-4">
+          <SectionHeader title="Learning activity">
+            <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+              View logs
             </button>
-            <button
-              onClick={createQuickNote}
-              className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
-            >
-              Capture note
-            </button>
-          </div>
+          </SectionHeader>
+          {recentLogs.length === 0 ? (
+            <p className="text-sm text-neutral-500">No learning logs yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentLogs.map((log) => (
+                <div
+                  key={log.id}
+                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-neutral-800">{log.topic}</p>
+                    <p className="text-xs text-neutral-500">
+                      {new Date(log.logged_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <p className="text-xs font-semibold text-neutral-600">
+                    {log.duration_minutes} min
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </Card>
       </section>
     </div>
