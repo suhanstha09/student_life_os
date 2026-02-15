@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #f7f7f5;
+  color: #1c1c1c;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Newsreader', serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d4d4 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #d4d4d4;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+*:focus-visible {
+  outline: 2px solid #111827;
+  outline-offset: 2px;
+}
