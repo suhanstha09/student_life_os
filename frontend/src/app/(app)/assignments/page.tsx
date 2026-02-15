@@ -133,12 +133,14 @@ export default function AssignmentsPage() {
   }
 
   const toggleCompleted = async (item: Assignment) => {
-    const nextStatus = item.status === 'completed' ? 'todo' : 'completed'
+    const nextStatus: Assignment['status'] =
+      item.status === 'completed' ? 'todo' : 'completed'
     await apiPatch(`/v1/assignments/${item.id}/`, { status: nextStatus })
-    const updated = assignments.map((current) =>
-      current.id === item.id ? { ...current, status: nextStatus } : current
+    setAssignments((current) =>
+      current.map((entry) =>
+        entry.id === item.id ? { ...entry, status: nextStatus } : entry
+      )
     )
-    setAssignments(updated)
   }
 
   const startEdit = (item: Assignment) => {
