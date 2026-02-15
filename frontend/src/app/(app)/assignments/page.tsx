@@ -35,6 +35,17 @@ const formatDue = (value: string) =>
     minute: '2-digit',
   })
 
+const isSameDay = (left: Date, right: Date) =>
+  left.getFullYear() === right.getFullYear() &&
+  left.getMonth() === right.getMonth() &&
+  left.getDate() === right.getDate()
+
+const isWithinDays = (date: Date, days: number) => {
+  const now = new Date()
+  const diff = date.getTime() - now.getTime()
+  return diff >= 0 && diff <= days * 24 * 60 * 60 * 1000
+}
+
 export default function AssignmentsPage() {
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [status, setStatus] = useState<'all' | Assignment['status']>('all')
@@ -67,8 +78,23 @@ export default function AssignmentsPage() {
     return 'All assignments'
   }, [status, priority])
 
+  const dueToday = useMemo(() => {
+    const today = new Date()
+    return assignments.filter((item) => isSameDay(new Date(item.due_date), today)).length
+  }, [assignments])
+
+  const dueThisWeek = useMemo(
+    () => assignments.filter((item) => isWithinDays(new Date(item.due_date), 7)).length,
+    [assignments]
+  )
+
+  const completedCount = useMemo(
+    () => assignments.filter((item) => item.status === 'completed').length,
+    [assignments]
+  )
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Assignments
@@ -77,6 +103,30 @@ export default function AssignmentsPage() {
         <p className="mt-2 text-sm text-neutral-500">
           Sort by urgency, priority, or course to stay ahead.
         </p>
+      </section>
+
+      <section className="grid gap-5 md:grid-cols-3">
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Due today
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{dueToday}</p>
+          <p className="mt-2 text-sm text-neutral-500">Items with deadlines today</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Next 7 days
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{dueThisWeek}</p>
+          <p className="mt-2 text-sm text-neutral-500">Keep the week under control</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Completed
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{completedCount}</p>
+          <p className="mt-2 text-sm text-neutral-500">Total assignments finished</p>
+        </Card>
       </section>
 
       <Card className="space-y-4">
@@ -117,7 +167,8 @@ export default function AssignmentsPage() {
         </div>
       </Card>
 
-      <Card className="space-y-4">
+      <div className="grid gap-5 xl:grid-cols-[1.4fr,0.6fr]">
+        <Card className="space-y-4">
         <SectionHeader title={`Assignment list - ${filteredLabel}`}>
           <span className="text-xs font-semibold text-neutral-400">
             {assignments.length} items
@@ -147,7 +198,26 @@ export default function AssignmentsPage() {
             ))}
           </div>
         )}
-      </Card>
+        </Card>
+
+        <Card className="space-y-4">
+          <SectionHeader title="Priority split" />
+          <div className="space-y-3">
+            {(['urgent', 'high', 'medium', 'low'] as Assignment['priority'][]).map((level) => {
+              const count = assignments.filter((item) => item.priority === level).length
+              return (
+                <div
+                  key={level}
+                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                >
+                  <p className="text-sm font-semibold text-neutral-700">{level}</p>
+                  <Badge label={`${count}`} tone={priorityTone[level]} />
+                </div>
+              )
+            })}
+          </div>
+        </Card>
+      </div>
     </div>
   )
 }
