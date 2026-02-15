@@ -47,6 +47,7 @@ type LearningLog = {
   logged_at: string
 }
 
+
 const priorityLabel = (priority: Assignment['priority']) => {
   switch (priority) {
     case 'urgent':
