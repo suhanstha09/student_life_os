@@ -67,6 +67,12 @@ const formatDue = (value: string) =>
     minute: '2-digit',
   })
 
+const isWithinDays = (date: Date, days: number) => {
+  const now = new Date()
+  const diff = date.getTime() - now.getTime()
+  return diff >= 0 && diff <= days * 24 * 60 * 60 * 1000
+}
+
 export default function Home() {
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [sessions, setSessions] = useState<FocusSession[]>([])
@@ -76,6 +82,8 @@ export default function Home() {
   const [logs, setLogs] = useState<LearningLog[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [reviewWeek, setReviewWeek] = useState(false)
+  const [quickTitle, setQuickTitle] = useState('')
 
   useEffect(() => {
     const load = async () => {
@@ -105,15 +113,20 @@ export default function Home() {
     load()
   }, [])
 
+  const filteredAssignments = useMemo(() => {
+    if (!reviewWeek) return assignments
+    return assignments.filter((item) => isWithinDays(new Date(item.due_date), 7))
+  }, [assignments, reviewWeek])
+
   const priorities = useMemo(
     () =>
-      assignments
+      filteredAssignments
         .filter((item) => item.status !== 'completed')
         .slice(0, 3),
-    [assignments]
+    [filteredAssignments]
   )
 
-  const deadlines = useMemo(() => assignments.slice(0, 3), [assignments])
+  const deadlines = useMemo(() => filteredAssignments.slice(0, 3), [filteredAssignments])
 
   const focusToday = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10)
@@ -127,10 +140,11 @@ export default function Home() {
   const recentLogs = useMemo(() => logs.slice(0, 4), [logs])
 
   const createQuickAssignment = async () => {
+    if (!quickTitle.trim()) return
     const due = new Date()
     due.setHours(due.getHours() + 6)
     await apiPost('/v1/assignments/', {
-      title: 'New assignment',
+      title: quickTitle.trim(),
       description: '',
       due_date: due.toISOString(),
       status: 'todo',
@@ -138,6 +152,7 @@ export default function Home() {
     })
     const refreshed = await apiList<Assignment>('/v1/assignments/?ordering=due_date')
     setAssignments(refreshed)
+    setQuickTitle('')
   }
 
   const createQuickFocus = async () => {
@@ -187,8 +202,11 @@ export default function Home() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button className="rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900">
-            Review week
+          <button
+            onClick={() => setReviewWeek((current) => !current)}
+            className="rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900"
+          >
+            {reviewWeek ? 'Week view on' : 'Review week'}
           </button>
           <button className="rounded-xl border border-neutral-900 bg-neutral-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800">
             Quick add
@@ -290,12 +308,18 @@ export default function Home() {
             <SectionHeader title="Quick add">
               <span className="text-xs font-semibold text-neutral-400">Shortcuts</span>
             </SectionHeader>
-            <div className="grid gap-2">
+            <div className="grid gap-3">
+              <input
+                className="rounded-xl border border-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-800"
+                placeholder="Assignment title"
+                value={quickTitle}
+                onChange={(event) => setQuickTitle(event.target.value)}
+              />
               <button
                 onClick={createQuickAssignment}
                 className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
               >
-                New assignment
+                Create assignment
               </button>
               <button
                 onClick={createQuickFocus}

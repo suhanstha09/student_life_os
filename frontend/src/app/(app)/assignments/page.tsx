@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Badge from '../../../components/ui/Badge'
 import Card from '../../../components/ui/Card'
 import SectionHeader from '../../../components/ui/SectionHeader'
-import { apiList } from '../../../lib/api'
+import { apiList, apiPatch, apiPost } from '../../../lib/api'
 
 type Assignment = {
   id: number
@@ -52,6 +52,11 @@ export default function AssignmentsPage() {
   const [priority, setPriority] = useState<'all' | Assignment['priority']>('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [title, setTitle] = useState('')
+  const [dueDate, setDueDate] = useState('')
+  const [formPriority, setFormPriority] = useState<Assignment['priority']>('medium')
+  const [formStatus, setFormStatus] = useState<Assignment['status']>('todo')
+  const [editingId, setEditingId] = useState<number | null>(null)
 
   useEffect(() => {
     const load = async () => {
@@ -92,6 +97,57 @@ export default function AssignmentsPage() {
     () => assignments.filter((item) => item.status === 'completed').length,
     [assignments]
   )
+
+  const saveAssignment = async () => {
+    if (!title.trim() || !dueDate) {
+      setError('Title and due date are required')
+      return
+    }
+
+    setError(null)
+    const payload = {
+      title: title.trim(),
+      due_date: new Date(dueDate).toISOString(),
+      status: formStatus,
+      priority: formPriority,
+    }
+
+    if (editingId) {
+      await apiPatch(`/v1/assignments/${editingId}/`, payload)
+    } else {
+      await apiPost('/v1/assignments/', payload)
+    }
+
+    setTitle('')
+    setDueDate('')
+    setFormPriority('medium')
+    setFormStatus('todo')
+    setEditingId(null)
+
+    const params = new URLSearchParams()
+    if (status !== 'all') params.set('status', status)
+    if (priority !== 'all') params.set('priority', priority)
+    params.set('ordering', 'due_date')
+    const data = await apiList<Assignment>(`/v1/assignments/?${params.toString()}`)
+    setAssignments(data)
+  }
+
+  const toggleCompleted = async (item: Assignment) => {
+    const nextStatus = item.status === 'completed' ? 'todo' : 'completed'
+    await apiPatch(`/v1/assignments/${item.id}/`, { status: nextStatus })
+    const updated = assignments.map((current) =>
+      current.id === item.id ? { ...current, status: nextStatus } : current
+    )
+    setAssignments(updated)
+  }
+
+  const startEdit = (item: Assignment) => {
+    setEditingId(item.id)
+    setTitle(item.title)
+    setDueDate(new Date(item.due_date).toISOString().slice(0, 16))
+    setFormPriority(item.priority)
+    setFormStatus(item.status)
+  }
 
   return (
     <div className="space-y-5">
@@ -185,38 +241,128 @@ export default function AssignmentsPage() {
             {assignments.map((item) => (
               <div
                 key={item.id}
-                className="grid gap-3 rounded-xl border border-neutral-200 px-4 py-3 md:grid-cols-[2fr,1fr,1fr,1fr] md:items-center"
+                className="grid gap-3 rounded-xl border border-neutral-200 px-4 py-3 md:grid-cols-[auto,2fr,1fr,1fr,1fr] md:items-center"
               >
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={item.status === 'completed'}
+                    onChange={() => toggleCompleted(item)}
+                    className="h-4 w-4 accent-neutral-900"
+                    aria-label="Mark assignment completed"
+                  />
+                </label>
                 <div>
                   <p className="text-sm font-semibold text-neutral-800">{item.title}</p>
                   <p className="text-xs text-neutral-500">{statusLabel[item.status]}</p>
                 </div>
                 <Badge label={statusLabel[item.status]} tone="blue" />
                 <Badge label={item.priority} tone={priorityTone[item.priority]} />
-                <p className="text-xs font-semibold text-neutral-600">{formatDue(item.due_date)}</p>
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold text-neutral-600">{formatDue(item.due_date)}</p>
+                  <button
+                    onClick={() => startEdit(item)}
+                    className="rounded-lg border border-neutral-200 px-2 py-1 text-xs font-semibold text-neutral-600 hover:border-neutral-300"
+                  >
+                    Edit
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         )}
         </Card>
 
-        <Card className="space-y-4">
-          <SectionHeader title="Priority split" />
-          <div className="space-y-3">
-            {(['urgent', 'high', 'medium', 'low'] as Assignment['priority'][]).map((level) => {
-              const count = assignments.filter((item) => item.priority === level).length
-              return (
-                <div
-                  key={level}
-                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+        <div className="space-y-5">
+          <Card className="space-y-4">
+            <SectionHeader title={editingId ? 'Edit assignment' : 'New assignment'}>
+              {editingId ? (
+                <button
+                  onClick={() => {
+                    setEditingId(null)
+                    setTitle('')
+                    setDueDate('')
+                    setFormPriority('medium')
+                    setFormStatus('todo')
+                  }}
+                  className="text-xs font-semibold text-neutral-400 hover:text-neutral-600"
                 >
-                  <p className="text-sm font-semibold text-neutral-700">{level}</p>
-                  <Badge label={`${count}`} tone={priorityTone[level]} />
-                </div>
-              )
-            })}
-          </div>
-        </Card>
+                  Cancel
+                </button>
+              ) : null}
+            </SectionHeader>
+            <div className="space-y-3">
+              <label className="text-sm font-semibold text-neutral-700">
+                Title
+                <input
+                  className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-800"
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                />
+              </label>
+              <label className="text-sm font-semibold text-neutral-700">
+                Due date
+                <input
+                  type="datetime-local"
+                  className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-800"
+                  value={dueDate}
+                  onChange={(event) => setDueDate(event.target.value)}
+                />
+              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="text-sm font-semibold text-neutral-700">
+                  Status
+                  <select
+                    className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-800"
+                    value={formStatus}
+                    onChange={(event) => setFormStatus(event.target.value as Assignment['status'])}
+                  >
+                    <option value="todo">To do</option>
+                    <option value="in_progress">In progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </label>
+                <label className="text-sm font-semibold text-neutral-700">
+                  Priority
+                  <select
+                    className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-800"
+                    value={formPriority}
+                    onChange={(event) => setFormPriority(event.target.value as Assignment['priority'])}
+                  >
+                    <option value="urgent">Urgent</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                  </select>
+                </label>
+              </div>
+              <button
+                onClick={saveAssignment}
+                className="rounded-xl border border-neutral-900 bg-neutral-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800"
+              >
+                {editingId ? 'Update assignment' : 'Create assignment'}
+              </button>
+            </div>
+          </Card>
+
+          <Card className="space-y-4">
+            <SectionHeader title="Priority split" />
+            <div className="space-y-3">
+              {(['urgent', 'high', 'medium', 'low'] as Assignment['priority'][]).map((level) => {
+                const count = assignments.filter((item) => item.priority === level).length
+                return (
+                  <div
+                    key={level}
+                    className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                  >
+                    <p className="text-sm font-semibold text-neutral-700">{level}</p>
+                    <Badge label={`${count}`} tone={priorityTone[level]} />
+                  </div>
+                )
+              })}
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import Card from '../../../components/ui/Card'
 import SectionHeader from '../../../components/ui/SectionHeader'
-import { apiList, apiPatch, apiPost } from '../../../lib/api'
+import { apiDelete, apiList, apiPatch, apiPost } from '../../../lib/api'
 
 type Note = {
   id: number
@@ -63,6 +63,20 @@ export default function NotesPage() {
       await loadNotes()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to save note')
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!activeNoteId) return
+    if (!window.confirm('Delete this note?')) return
+    try {
+      await apiDelete(`/v1/notes/${activeNoteId}/`)
+      setActiveNoteId(null)
+      setTitle('')
+      setContent('')
+      await loadNotes()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to delete note')
     }
   }
 
@@ -155,9 +169,22 @@ export default function NotesPage() {
         <div className="space-y-5">
           <Card className="space-y-4">
           <SectionHeader title="Editor">
-            <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600" onClick={handleSave}>
-              Save
-            </button>
+            <div className="flex items-center gap-2">
+              {activeNoteId ? (
+                <button
+                  className="text-xs font-semibold text-rose-500 hover:text-rose-600"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              ) : null}
+              <button
+                className="text-xs font-semibold text-neutral-400 hover:text-neutral-600"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+            </div>
           </SectionHeader>
           <input
             className="w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-800"
