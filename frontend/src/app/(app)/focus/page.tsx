@@ -26,6 +26,11 @@ export default function FocusPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const totalMinutes = sessions.reduce(
+    (total, session) => total + session.planned_duration,
+    0
+  )
+
   const loadSessions = async () => {
     const data = await apiList<FocusSession>('/v1/focus/sessions/?ordering=-started_at')
     setSessions(data)
@@ -59,7 +64,7 @@ export default function FocusPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Focus
@@ -70,7 +75,31 @@ export default function FocusPage() {
         </p>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
+      <section className="grid gap-5 md:grid-cols-3">
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Sessions
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{sessions.length}</p>
+          <p className="mt-2 text-sm text-neutral-500">Logged focus blocks</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Total minutes
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{totalMinutes}</p>
+          <p className="mt-2 text-sm text-neutral-500">Tracked across sessions</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Target
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">120</p>
+          <p className="mt-2 text-sm text-neutral-500">Daily focus goal</p>
+        </Card>
+      </section>
+
+      <div className="grid gap-5 xl:grid-cols-[1.3fr,0.7fr]">
         <Card className="flex flex-col gap-5">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
