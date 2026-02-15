@@ -72,8 +72,10 @@ export default function NotesPage() {
     setContent('')
   }
 
+  const mostRecent = notes[0]
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Notes
@@ -84,7 +86,33 @@ export default function NotesPage() {
         </p>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-[0.9fr,1.1fr]">
+      <section className="grid gap-5 md:grid-cols-3">
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Total notes
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{notes.length}</p>
+          <p className="mt-2 text-sm text-neutral-500">Synced to your workspace</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Latest update
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">
+            {mostRecent ? new Date(mostRecent.updated_at).toLocaleDateString() : 'No data'}
+          </p>
+          <p className="mt-2 text-sm text-neutral-500">Last note touched</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Drafts
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{notes.length ? 1 : 0}</p>
+          <p className="mt-2 text-sm text-neutral-500">Ideas in progress</p>
+        </Card>
+      </section>
+
+      <div className="grid gap-5 xl:grid-cols-[0.9fr,1.1fr]">
         <Card className="space-y-4">
           <SectionHeader title="Your notes">
             <button
@@ -124,7 +152,8 @@ export default function NotesPage() {
           )}
         </Card>
 
-        <Card className="space-y-4">
+        <div className="space-y-5">
+          <Card className="space-y-4">
           <SectionHeader title="Editor">
             <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600" onClick={handleSave}>
               Save
@@ -147,7 +176,21 @@ export default function NotesPage() {
               {error}
             </p>
           ) : null}
-        </Card>
+          </Card>
+
+          <Card className="space-y-4">
+            <SectionHeader title="Quick capture" />
+            <p className="text-sm text-neutral-500">
+              Drop a quick thought without switching context.
+            </p>
+            <button
+              onClick={handleNew}
+              className="rounded-xl border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 hover:border-neutral-300"
+            >
+              New scratch note
+            </button>
+          </Card>
+        </div>
       </div>
     </div>
   )

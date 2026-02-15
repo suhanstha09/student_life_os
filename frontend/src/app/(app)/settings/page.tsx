@@ -53,7 +53,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Settings
@@ -62,6 +62,32 @@ export default function SettingsPage() {
         <p className="mt-2 text-sm text-neutral-500">
           Keep notifications and preferences aligned to your routine.
         </p>
+      </section>
+
+      <section className="grid gap-5 md:grid-cols-3">
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Profile
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">
+            {user?.first_name || user?.username || 'Student'}
+          </p>
+          <p className="mt-2 text-sm text-neutral-500">Personal workspace</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Timezone
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{timezone}</p>
+          <p className="mt-2 text-sm text-neutral-500">Current preference</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Daily focus
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">{dailyGoal} min</p>
+          <p className="mt-2 text-sm text-neutral-500">Goal per day</p>
+        </Card>
       </section>
 
       <Card className="space-y-4">

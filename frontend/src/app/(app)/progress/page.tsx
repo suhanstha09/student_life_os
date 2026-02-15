@@ -102,8 +102,12 @@ export default function ProgressPage() {
     )
   }
 
+  const averageScore = summaries.length
+    ? summaries.reduce((sum, item) => sum + item.productivity_score, 0) / summaries.length
+    : 0
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Progress
@@ -114,7 +118,37 @@ export default function ProgressPage() {
         </p>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
+      <section className="grid gap-5 md:grid-cols-3">
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Focus hours
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">
+            {(weeklyFocus.reduce((a, b) => a + b, 0) / 60).toFixed(1)}h
+          </p>
+          <p className="mt-2 text-sm text-neutral-500">Last 7 days</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Productivity score
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">
+            {averageScore.toFixed(1)}
+          </p>
+          <p className="mt-2 text-sm text-neutral-500">Average this week</p>
+        </Card>
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Streak
+          </p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900">
+            {focusStreak ? `${focusStreak.current_count} days` : '0 days'}
+          </p>
+          <p className="mt-2 text-sm text-neutral-500">Focus habit</p>
+        </Card>
+      </section>
+
+      <div className="grid gap-5 xl:grid-cols-[1.2fr,0.8fr]">
         <Card className="space-y-4">
           <SectionHeader title="Focus time">
             <p className="text-xs font-semibold text-neutral-400">Last 7 days</p>
