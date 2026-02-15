@@ -6,7 +6,7 @@ export default function TopBar() {
   const { user, logout } = useAuth()
 
   return (
-    <header className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white/80 px-6 py-5 shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+    <header className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white/80 px-6 py-5 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between">
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Command Bar
@@ -14,8 +14,8 @@ export default function TopBar() {
         <h2 className="mt-2 text-2xl font-semibold">Plan your day in one place</h2>
       </div>
 
-      <div className="flex w-full flex-1 items-center gap-3 sm:max-w-md">
-        <label className="flex w-full items-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-base text-neutral-500">
+      <div className="flex w-full flex-1 flex-wrap items-center gap-3 lg:max-w-xl">
+        <label className="flex min-w-[240px] flex-1 items-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-base text-neutral-500">
           <span className="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-300">
             Search
           </span>
@@ -28,12 +28,12 @@ export default function TopBar() {
             K
           </kbd>
         </label>
-        <button className="hidden rounded-xl border border-neutral-200 bg-neutral-900 px-5 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-neutral-800 sm:inline-flex">
+        <button className="rounded-xl border border-neutral-200 bg-neutral-900 px-5 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-neutral-800">
           Quick Add
         </button>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <div className="text-right">
           <p className="text-sm font-semibold text-neutral-500">Signed in</p>
           <p className="text-base font-semibold text-neutral-900">

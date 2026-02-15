@@ -34,7 +34,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className="mt-6 flex flex-row gap-3 overflow-x-auto lg:flex-col lg:overflow-visible">
+      <nav className="mt-6 flex flex-col gap-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href
 
@@ -49,13 +49,6 @@ export default function Sidebar() {
               }`}
             >
               <span className="font-medium">{item.label}</span>
-              <span
-                className={`text-xs font-semibold uppercase tracking-[0.2em] ${
-                  isActive ? 'text-neutral-300' : 'text-neutral-400'
-                }`}
-              >
-                {item.label.slice(0, 2)}
-              </span>
             </Link>
           )
         })}
