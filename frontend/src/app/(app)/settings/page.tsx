@@ -72,45 +72,45 @@ export default function SettingsPage() {
   return (
     <div className="space-y-5">
       <section>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
           Settings
         </p>
-        <h1 className="mt-2 text-3xl font-semibold text-neutral-900">Preferences</h1>
-        <p className="mt-2 text-sm text-neutral-500">
+        <h1 className="mt-2 text-3xl font-semibold text-neutral-900 dark:text-white">Preferences</h1>
+        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-300">
           Keep notifications and preferences aligned to your routine.
         </p>
       </section>
 
       <section className="grid gap-5 md:grid-cols-3">
         <Card>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
             Profile
           </p>
-          <p className="mt-3 text-3xl font-semibold text-neutral-900">
+          <p className="mt-3 text-3xl font-semibold text-neutral-900 dark:text-white">
             {user?.first_name || user?.username || 'Student'}
           </p>
-          <p className="mt-2 text-sm text-neutral-500">Personal workspace</p>
+          <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-300">Personal workspace</p>
         </Card>
         <Card>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
             Timezone
           </p>
-          <p className="mt-3 text-3xl font-semibold text-neutral-900">{timezone}</p>
-          <p className="mt-2 text-sm text-neutral-500">Current preference</p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900 dark:text-white">{timezone}</p>
+          <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-300">Current preference</p>
         </Card>
         <Card>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
             Daily focus
           </p>
-          <p className="mt-3 text-3xl font-semibold text-neutral-900">{dailyGoal} min</p>
-          <p className="mt-2 text-sm text-neutral-500">Goal per day</p>
+          <p className="mt-3 text-3xl font-semibold text-neutral-900 dark:text-white">{dailyGoal} min</p>
+          <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-300">Goal per day</p>
         </Card>
       </section>
 
       <Card className="space-y-4">
         <SectionHeader title="Account">
           <button
-            className="rounded-xl border border-neutral-200 px-3 py-1 text-xs font-semibold text-neutral-600"
+            className="rounded-xl border border-neutral-200 px-3 py-1 text-xs font-semibold text-neutral-600 dark:text-neutral-200 dark:border-neutral-700"
             onClick={handleSave}
             disabled={saving}
           >
@@ -118,7 +118,7 @@ export default function SettingsPage() {
           </button>
         </SectionHeader>
         <div className="grid gap-4 md:grid-cols-2">
-          <label className="text-sm font-semibold text-neutral-700">
+          <label className="text-sm font-semibold text-neutral-700 dark:text-neutral-200">
             First name
             <input
               className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-700"
@@ -126,7 +126,7 @@ export default function SettingsPage() {
               onChange={(event) => setFirstName(event.target.value)}
             />
           </label>
-          <label className="text-sm font-semibold text-neutral-700">
+          <label className="text-sm font-semibold text-neutral-700 dark:text-neutral-200">
             Last name
             <input
               className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-700"
@@ -134,7 +134,7 @@ export default function SettingsPage() {
               onChange={(event) => setLastName(event.target.value)}
             />
           </label>
-          <label className="text-sm font-semibold text-neutral-700">
+          <label className="text-sm font-semibold text-neutral-700 dark:text-neutral-200">
             Timezone
             <input
               className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-700"
@@ -142,7 +142,7 @@ export default function SettingsPage() {
               onChange={(event) => setTimezone(event.target.value)}
             />
           </label>
-          <label className="text-sm font-semibold text-neutral-700">
+          <label className="text-sm font-semibold text-neutral-700 dark:text-neutral-200">
             Daily focus goal (minutes)
             <input
               className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-700"
@@ -153,7 +153,7 @@ export default function SettingsPage() {
           </label>
         </div>
         <div className="space-y-2">
-          <p className="text-sm font-semibold text-neutral-700">Theme</p>
+          <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-200">Theme</p>
           <div className="flex flex-wrap gap-2">
             {['light', 'system', 'dark'].map((label) => (
               <button
@@ -161,8 +161,8 @@ export default function SettingsPage() {
                 onClick={() => setTheme(label)}
                 className={`rounded-xl border px-4 py-2 text-sm font-semibold ${
                   theme === label
-                    ? 'border-neutral-900 bg-neutral-900 text-white'
-                    : 'border-neutral-200 text-neutral-600 hover:border-neutral-300'
+                    ? 'border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white/10 dark:text-white'
+                    : 'border-neutral-200 text-neutral-600 hover:border-neutral-300 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-500'
                 }`}
               >
                 {label}
@@ -171,7 +171,7 @@ export default function SettingsPage() {
           </div>
         </div>
         {message ? (
-          <p className="text-xs font-semibold text-neutral-500">{message}</p>
+          <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-300">{message}</p>
         ) : null}
       </Card>
 
@@ -181,13 +181,13 @@ export default function SettingsPage() {
           {settingsToggles.map((item) => (
             <label
               key={item.label}
-              className="flex items-center justify-between rounded-xl border border-neutral-200 px-3 py-3"
+              className="flex items-center justify-between rounded-xl border border-neutral-200 px-3 py-3 dark:border-neutral-700"
             >
               <div>
-                <p className="text-sm font-semibold text-neutral-800">{item.label}</p>
-                <p className="text-xs text-neutral-500">{item.description}</p>
+                <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-100">{item.label}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{item.description}</p>
               </div>
-              <input type="checkbox" className="h-4 w-4 accent-neutral-900" defaultChecked />
+              <input type="checkbox" className="h-4 w-4 accent-neutral-900 dark:accent-neutral-100" defaultChecked />
             </label>
           ))}
         </div>
