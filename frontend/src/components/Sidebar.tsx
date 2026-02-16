@@ -19,7 +19,7 @@ export default function Sidebar() {
   const { user } = useAuth()
 
   return (
-    <aside className="rounded-2xl border border-neutral-200 bg-white/70 p-5 shadow-sm backdrop-blur">
+    <aside className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-zinc-900/80 p-6 md:p-8 shadow-sm backdrop-blur flex flex-col gap-6">
       <div className="flex items-center justify-between lg:block">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400">
@@ -54,7 +54,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="mt-6 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+      <div className="mt-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-zinc-800 p-4">
         <p className="text-sm font-medium text-neutral-500">Today</p>
         <p className="mt-2 text-base font-semibold text-neutral-800">
           2 deadlines, 1 focus block

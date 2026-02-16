@@ -8,12 +8,8 @@ type CardProps = {
 export default function Card({ children, className = '' }: CardProps) {
   return (
     <div
-      className={`min-h-[140px] rounded-2xl border px-7 py-6 shadow-sm ${className}`}
-      style={{
-        background: 'var(--color-card)',
-        borderColor: 'var(--color-border)',
-        color: 'var(--color-text)',
-      }}
+      className={`min-h-[140px] rounded-2xl border bg-white dark:bg-zinc-900 border-neutral-200 dark:border-neutral-800 px-8 py-8 md:px-10 md:py-8 shadow-sm ${className}`}
+      style={{ color: 'var(--color-text)' }}
     >
       {children}
     </div>

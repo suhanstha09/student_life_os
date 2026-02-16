@@ -6,7 +6,7 @@ export default function TopBar() {
   const { user, logout } = useAuth()
 
   return (
-    <header className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white/80 px-6 py-5 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between">
+    <header className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-zinc-900/80 px-6 md:px-10 py-6 md:py-8 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between">
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Command Bar
