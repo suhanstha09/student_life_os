@@ -32,6 +32,23 @@ export default function SettingsPage() {
     setTheme(user.theme ?? 'system')
   }, [user])
 
+  // Update theme on change
+  useEffect(() => {
+    const root = window.document.documentElement
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    let applied: 'dark' | 'light'
+    if (theme === 'system') {
+      applied = systemDark ? 'dark' : 'light'
+    } else {
+      applied = theme
+    }
+    if (applied === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+  }, [theme])
+
   const handleSave = async () => {
     setSaving(true)
     setMessage(null)
