@@ -11,7 +11,13 @@ type AppShellProps = {
 
 export default function AppShell({ children }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[#f7f7f5] text-[#1c1c1c]">
+    <div
+      className="min-h-screen"
+      style={{
+        background: 'var(--color-bg)',
+        color: 'var(--color-text)',
+      }}
+    >
       <div className="mx-auto w-full max-w-[1800px] px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[320px,1fr]">
           <Sidebar />
