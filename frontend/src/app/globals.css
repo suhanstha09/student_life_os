@@ -34,9 +34,10 @@ html {
     ),
     linear-gradient(to bottom, rgba(17, 24, 39, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
+
   color: var(--color-text);
   transition: background 0.2s, color 0.2s;
-}
+/* removed extra closing brace */
 
 h1,
 h2,
