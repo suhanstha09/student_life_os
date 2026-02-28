@@ -14,14 +14,7 @@ const settingsToggles = [
 ]
 
 export default function SettingsPage() {
-  const { user, refreshUser } = useAuth()
-  const [firstName, setFirstName] = useState(user?.first_name ?? '')
-  const [lastName, setLastName] = useState(user?.last_name ?? '')
-  const [timezone, setTimezone] = useState(user?.timezone ?? 'UTC')
-  const [dailyGoal, setDailyGoal] = useState(user?.daily_focus_goal ?? 120)
-  const [theme, setTheme] = useState(user?.theme ?? 'system')
-  const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
+  // ...existing code...
 
   useEffect(() => {
     if (!user) return
@@ -70,7 +63,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 bg-neutral-900 min-h-screen p-4">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
           Settings
