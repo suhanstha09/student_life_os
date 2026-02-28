@@ -21,26 +21,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-neutral-100 py-12 px-4">
-      <div className="w-full max-w-md p-8 rounded-2xl shadow-xl bg-white border border-neutral-100">
+    <div className="min-h-screen flex items-center justify-center bg-neutral-900 py-12 px-4">
+      <div className="w-full max-w-md p-8 rounded-2xl shadow-xl bg-neutral-800 border border-neutral-700">
         <div className="mb-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-300">
             Student Life OS
           </p>
-          <h1 className="mt-3 text-3xl font-semibold text-neutral-900">Welcome back</h1>
-          <p className="mt-2 text-sm text-neutral-500">
+          <h1 className="mt-3 text-3xl font-semibold text-white">Welcome back</h1>
+          <p className="mt-2 text-sm text-neutral-300">
             Sign in to continue your daily plan.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-2" htmlFor="email">
+            <label className="block text-sm font-semibold text-neutral-200 mb-2" htmlFor="email">
               Email
             </label>
             <input
               id="email"
-              className="w-full rounded-lg border border-neutral-300 px-4 py-3 text-base text-neutral-900 bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+              className="w-full rounded-lg border border-neutral-700 px-4 py-3 text-base text-neutral-100 bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-neutral-500"
               type="email"
               autoComplete="email"
               value={email}
@@ -49,12 +49,12 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-2" htmlFor="password">
+            <label className="block text-sm font-semibold text-neutral-200 mb-2" htmlFor="password">
               Password
             </label>
             <input
               id="password"
-              className="w-full rounded-lg border border-neutral-300 px-4 py-3 text-base text-neutral-900 bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+              className="w-full rounded-lg border border-neutral-700 px-4 py-3 text-base text-neutral-100 bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-neutral-500"
               type="password"
               autoComplete="current-password"
               value={password}
@@ -64,7 +64,7 @@ export default function LoginPage() {
           </div>
 
           {error ? (
-            <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-600 text-center">
+            <p className="rounded-lg border border-rose-400 bg-rose-900/30 px-3 py-2 text-sm text-rose-300 text-center">
               {error}
             </p>
           ) : null}
@@ -78,9 +78,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-sm text-neutral-500">
+        <p className="mt-8 text-center text-sm text-neutral-300">
           New here?{' '}
-          <Link className="font-semibold text-indigo-600 hover:underline" href="/register">
+          <Link className="font-semibold text-indigo-400 hover:underline" href="/register">
             Create an account
           </Link>
         </p>
