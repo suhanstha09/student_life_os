@@ -38,26 +38,27 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
-          Student Life OS
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold">Create your workspace</h1>
-        <p className="mt-2 text-sm text-neutral-500">
-          Start tracking focus, deadlines, and progress.
-        </p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-neutral-900 py-12 px-4">
+      <div className="w-full max-w-md p-8 rounded-2xl shadow-xl bg-neutral-800 border border-neutral-700">
+        <div className="mb-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-300">
+            Student Life OS
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold text-white">Create your workspace</h1>
+          <p className="mt-2 text-sm text-neutral-300">
+            Start tracking focus, deadlines, and progress.
+          </p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block text-sm font-semibold text-neutral-700">
-            First name
-            <input
-              className="mt-2 w-full rounded-xl border border-neutral-200 px-3 py-2 text-sm text-neutral-800"
-              value={form.firstName}
-              onChange={(event) => handleChange('firstName', event.target.value)}
-            />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-sm font-semibold text-neutral-200">
+              First name
+              <input
+                className="mt-2 w-full rounded-xl border border-neutral-700 px-3 py-2 text-sm text-neutral-100 bg-neutral-900 placeholder:text-neutral-500"
+                value={form.firstName}
+                onChange={(event) => handleChange('firstName', event.target.value)}
+              />
           </label>
           <label className="block text-sm font-semibold text-neutral-700">
             Last name
