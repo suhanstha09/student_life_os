@@ -47,16 +47,7 @@ const isWithinDays = (date: Date, days: number) => {
 }
 
 export default function AssignmentsPage() {
-  const [assignments, setAssignments] = useState<Assignment[]>([])
-  const [status, setStatus] = useState<'all' | Assignment['status']>('all')
-  const [priority, setPriority] = useState<'all' | Assignment['priority']>('all')
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [title, setTitle] = useState('')
-  const [dueDate, setDueDate] = useState('')
-  const [formPriority, setFormPriority] = useState<Assignment['priority']>('medium')
-  const [formStatus, setFormStatus] = useState<Assignment['status']>('todo')
-  const [editingId, setEditingId] = useState<number | null>(null)
+  // ...existing code...
 
   useEffect(() => {
     const load = async () => {
@@ -152,7 +143,7 @@ export default function AssignmentsPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 bg-neutral-900 min-h-screen p-4">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Assignments
