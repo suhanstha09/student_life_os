@@ -28,11 +28,7 @@ type Streak = {
 const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
 export default function ProgressPage() {
-  const [summaries, setSummaries] = useState<DailySummary[]>([])
-  const [logs, setLogs] = useState<LearningLog[]>([])
-  const [streaks, setStreaks] = useState<Streak[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // ...existing code...
 
   useEffect(() => {
     const load = async () => {
@@ -107,7 +103,7 @@ export default function ProgressPage() {
     : 0
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 bg-neutral-900 min-h-screen p-4">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Progress
