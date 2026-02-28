@@ -189,27 +189,27 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 bg-neutral-900 min-h-screen p-4">
       <section className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-300">
             Dashboard
           </p>
-          <h1 className="mt-2 text-3xl font-semibold text-neutral-900">
+          <h1 className="mt-2 text-3xl font-semibold text-white">
             Your day at a glance
           </h1>
-          <p className="mt-2 text-sm text-neutral-500">
+          <p className="mt-2 text-sm text-neutral-300">
             Focus on the two most important tasks and keep momentum.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setReviewWeek((current) => !current)}
-            className="rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 shadow-sm transition hover:border-neutral-300 hover:text-neutral-900"
+            className="rounded-xl border border-neutral-700 bg-neutral-800 px-4 py-2 text-sm font-semibold text-neutral-100 shadow-sm transition hover:border-neutral-500 hover:text-white"
           >
             {reviewWeek ? 'Week view on' : 'Review week'}
           </button>
-          <button className="rounded-xl border border-neutral-900 bg-neutral-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800">
+          <button className="rounded-xl border border-neutral-100 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 shadow-sm transition hover:bg-neutral-200">
             Quick add
           </button>
         </div>
@@ -217,54 +217,54 @@ export default function Home() {
 
       <section className="grid gap-5 xl:grid-cols-[1.4fr,1fr]">
         <div className="space-y-5">
-          <Card className="space-y-4">
-          <SectionHeader title="Today's priorities">
-            <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
-              View all
-            </button>
-          </SectionHeader>
-          <div className="space-y-3">
-            {priorities.length === 0 ? (
-              <p className="text-sm text-neutral-500">
-                No priorities yet. Add one from assignments or quick add.
-              </p>
-            ) : (
-              priorities.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
-                >
-                  <div>
-                    <p className="text-sm font-semibold text-neutral-800">{item.title}</p>
-                    <p className="text-xs text-neutral-500">
-                      Due {formatDue(item.due_date)}
-                    </p>
+          <Card className="space-y-4 bg-neutral-800 border border-neutral-700">
+            <SectionHeader title="Today's priorities">
+              <button className="text-xs font-semibold text-neutral-300 hover:text-white">
+                View all
+              </button>
+            </SectionHeader>
+            <div className="space-y-3">
+              {priorities.length === 0 ? (
+                <p className="text-sm text-neutral-400">
+                  No priorities yet. Add one from assignments or quick add.
+                </p>
+              ) : (
+                priorities.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between rounded-xl border border-neutral-700 px-4 py-3"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-100">{item.title}</p>
+                      <p className="text-xs text-neutral-400">
+                        Due {formatDue(item.due_date)}
+                      </p>
+                    </div>
+                    <Badge label={priorityLabel(item.priority)} tone="amber" />
                   </div>
-                  <Badge label={priorityLabel(item.priority)} tone="amber" />
-                </div>
-              ))
-            )}
-          </div>
+                ))
+              )}
+            </div>
           </Card>
 
-          <Card className="space-y-4">
+          <Card className="space-y-4 bg-neutral-800 border border-neutral-700">
             <SectionHeader title="Upcoming deadlines">
-              <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+              <button className="text-xs font-semibold text-neutral-300 hover:text-white">
                 Add
               </button>
             </SectionHeader>
             <div className="space-y-3">
               {deadlines.length === 0 ? (
-                <p className="text-sm text-neutral-500">No deadlines scheduled.</p>
+                <p className="text-sm text-neutral-400">No deadlines scheduled.</p>
               ) : (
                 deadlines.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                    className="flex items-center justify-between rounded-xl border border-neutral-700 px-4 py-3"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-neutral-800">{item.title}</p>
-                      <p className="text-xs text-neutral-500">Due {formatDue(item.due_date)}</p>
+                      <p className="text-sm font-semibold text-neutral-100">{item.title}</p>
+                      <p className="text-xs text-neutral-400">Due {formatDue(item.due_date)}</p>
                     </div>
                     <Badge label={priorityLabel(item.priority)} tone="blue" />
                   </div>
@@ -275,28 +275,28 @@ export default function Home() {
         </div>
 
         <div className="space-y-5">
-          <Card className="space-y-4">
+          <Card className="space-y-4 bg-neutral-800 border border-neutral-700">
             <SectionHeader title="Focus pipeline">
-              <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+              <button className="text-xs font-semibold text-neutral-300 hover:text-white">
                 New session
               </button>
             </SectionHeader>
             {sessions.length === 0 ? (
-              <p className="text-sm text-neutral-500">No sessions logged yet.</p>
+              <p className="text-sm text-neutral-400">No sessions logged yet.</p>
             ) : (
               <div className="space-y-3">
                 {sessions.slice(0, 4).map((session) => (
                   <div
                     key={session.id}
-                    className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                    className="flex items-center justify-between rounded-xl border border-neutral-700 px-4 py-3"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-neutral-800">{session.title}</p>
-                      <p className="text-xs text-neutral-500">
+                      <p className="text-sm font-semibold text-neutral-100">{session.title}</p>
+                      <p className="text-xs text-neutral-400">
                         {new Date(session.started_at).toLocaleDateString()}
                       </p>
                     </div>
-                    <p className="text-xs font-semibold text-neutral-600">
+                    <p className="text-xs font-semibold text-neutral-200">
                       {session.planned_duration} min
                     </p>
                   </div>
@@ -305,32 +305,32 @@ export default function Home() {
             )}
           </Card>
 
-          <Card className="space-y-4">
+          <Card className="space-y-4 bg-neutral-800 border border-neutral-700">
             <SectionHeader title="Quick add">
-              <span className="text-xs font-semibold text-neutral-400">Shortcuts</span>
+              <span className="text-xs font-semibold text-neutral-300">Shortcuts</span>
             </SectionHeader>
             <div className="grid gap-3">
               <input
-                className="rounded-xl border border-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-800"
+                className="rounded-xl border border-neutral-700 px-3 py-2 text-sm font-semibold text-neutral-100 bg-neutral-900 placeholder:text-neutral-500"
                 placeholder="Assignment title"
                 value={quickTitle}
                 onChange={(event) => setQuickTitle(event.target.value)}
               />
               <button
                 onClick={createQuickAssignment}
-                className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
+                className="rounded-xl border border-neutral-700 px-3 py-2 text-left text-sm font-semibold text-neutral-200 bg-neutral-900 transition hover:border-neutral-500 hover:text-white"
               >
                 Create assignment
               </button>
               <button
                 onClick={createQuickFocus}
-                className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
+                className="rounded-xl border border-neutral-700 px-3 py-2 text-left text-sm font-semibold text-neutral-200 bg-neutral-900 transition hover:border-neutral-500 hover:text-white"
               >
                 Start focus session
               </button>
               <button
                 onClick={createQuickNote}
-                className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm font-semibold text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-900"
+                className="rounded-xl border border-neutral-700 px-3 py-2 text-left text-sm font-semibold text-neutral-200 bg-neutral-900 transition hover:border-neutral-500 hover:text-white"
               >
                 Capture note
               </button>
@@ -340,67 +340,67 @@ export default function Home() {
       </section>
 
       <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        <Card>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+        <Card className="bg-neutral-800 border border-neutral-700">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-300">
             Streak
           </p>
-          <p className="mt-4 text-3xl font-semibold text-neutral-900">
+          <p className="mt-4 text-3xl font-semibold text-white">
             {currentStreak ? `${currentStreak.current_count} days` : '0 days'}
           </p>
-          <p className="mt-2 text-sm text-neutral-500">Daily focus habit</p>
+          <p className="mt-2 text-sm text-neutral-300">Daily focus habit</p>
         </Card>
-        <Card>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+        <Card className="bg-neutral-800 border border-neutral-700">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-300">
             Focus time
           </p>
-          <p className="mt-4 text-3xl font-semibold text-neutral-900">{focusToday}</p>
-          <p className="mt-2 text-sm text-neutral-500">
+          <p className="mt-4 text-3xl font-semibold text-white">{focusToday}</p>
+          <p className="mt-2 text-sm text-neutral-300">
             {sessions.length} sessions logged
           </p>
         </Card>
-        <Card>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+        <Card className="bg-neutral-800 border border-neutral-700">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-300">
             Notes captured
           </p>
-          <p className="mt-4 text-3xl font-semibold text-neutral-900">
+          <p className="mt-4 text-3xl font-semibold text-white">
             {notes.length}
           </p>
-          <p className="mt-2 text-sm text-neutral-500">Updated this week</p>
+          <p className="mt-2 text-sm text-neutral-300">Updated this week</p>
         </Card>
-        <Card>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
+        <Card className="bg-neutral-800 border border-neutral-700">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-300">
             Learning logs
           </p>
-          <p className="mt-4 text-3xl font-semibold text-neutral-900">
+          <p className="mt-4 text-3xl font-semibold text-white">
             {logs.length}
           </p>
-          <p className="mt-2 text-sm text-neutral-500">Active topics tracked</p>
+          <p className="mt-2 text-sm text-neutral-300">Active topics tracked</p>
         </Card>
       </section>
 
       <section className="grid gap-5 xl:grid-cols-[1.2fr,0.8fr]">
-        <Card className="space-y-4">
+        <Card className="space-y-4 bg-neutral-800 border border-neutral-700">
           <SectionHeader title="Recent notes">
-            <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+            <button className="text-xs font-semibold text-neutral-300 hover:text-white">
               Open notes
             </button>
           </SectionHeader>
           {recentNotes.length === 0 ? (
-            <p className="text-sm text-neutral-500">No notes created yet.</p>
+            <p className="text-sm text-neutral-400">No notes created yet.</p>
           ) : (
             <div className="space-y-3">
               {recentNotes.map((note) => (
                 <div
                   key={note.id}
-                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                  className="flex items-center justify-between rounded-xl border border-neutral-700 px-4 py-3"
                 >
                   <div>
-                    <p className="text-sm font-semibold text-neutral-800">{note.title}</p>
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-sm font-semibold text-neutral-100">{note.title}</p>
+                    <p className="text-xs text-neutral-400">
                       Updated {new Date(note.updated_at).toLocaleDateString()}
                     </p>
                   </div>
-                  <button className="rounded-lg border border-neutral-200 px-3 py-1 text-xs font-semibold text-neutral-600">
+                  <button className="rounded-lg border border-neutral-700 px-3 py-1 text-xs font-semibold text-neutral-200 hover:text-white">
                     Open
                   </button>
                 </div>
@@ -409,28 +409,28 @@ export default function Home() {
           )}
         </Card>
 
-        <Card className="space-y-4">
+        <Card className="space-y-4 bg-neutral-800 border border-neutral-700">
           <SectionHeader title="Learning activity">
-            <button className="text-xs font-semibold text-neutral-400 hover:text-neutral-600">
+            <button className="text-xs font-semibold text-neutral-300 hover:text-white">
               View logs
             </button>
           </SectionHeader>
           {recentLogs.length === 0 ? (
-            <p className="text-sm text-neutral-500">No learning logs yet.</p>
+            <p className="text-sm text-neutral-400">No learning logs yet.</p>
           ) : (
             <div className="space-y-3">
               {recentLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-center justify-between rounded-xl border border-neutral-200 px-4 py-3"
+                  className="flex items-center justify-between rounded-xl border border-neutral-700 px-4 py-3"
                 >
                   <div>
-                    <p className="text-sm font-semibold text-neutral-800">{log.topic}</p>
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-sm font-semibold text-neutral-100">{log.topic}</p>
+                    <p className="text-xs text-neutral-400">
                       {new Date(log.logged_at).toLocaleDateString()}
                     </p>
                   </div>
-                  <p className="text-xs font-semibold text-neutral-600">
+                  <p className="text-xs font-semibold text-neutral-200">
                     {log.duration_minutes} min
                   </p>
                 </div>
