@@ -20,11 +20,7 @@ const formatTime = (value: string) =>
   })
 
 export default function FocusPage() {
-  const [sessions, setSessions] = useState<FocusSession[]>([])
-  const [title, setTitle] = useState('Deep work')
-  const [duration, setDuration] = useState(25)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // ...existing code...
 
   const totalMinutes = sessions.reduce(
     (total, session) => total + session.planned_duration,
@@ -64,7 +60,7 @@ export default function FocusPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 bg-neutral-900 min-h-screen p-4">
       <section>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
           Focus
